@@ -3,148 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conexões Profundas - O Jogo</title>
+    <title>This Isn't a Game - O Jogo</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            --color-n1: #4ea8de;
-            --color-n2: #5e60ce;
-            --color-n3: #7400b8;
-            --color-n4: #f72585;
-            --text-light: #f8f9fa;
+            /* Paleta inspirada na imagem */
+            --bg-main: #510a18;       /* Fundo vinho escuro */
+            --card-bg: #821426;       /* Fundo das cartas vinho médio */
+            --accent-red: #c91f27;    /* Vermelho vibrante */
+            --text-cream: #f4eedd;    /* Creme/Bege das letras */
+            --text-dark: #2c050c;     /* Cor escura para contrastes */
+            --accent-peach: #e8a598;  /* Cor da carinha feliz da capa */
+            
+            --font-title: 'Anton', sans-serif;
+            --font-body: 'Montserrat', sans-serif;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background: var(--bg-gradient);
+            background-color: var(--bg-main);
+            /* Gradiente radial para dar profundidade de mesa de jogo */
+            background-image: radial-gradient(circle at center, #6b0f21 0%, #31050e 100%);
             min-height: 100vh;
-            color: var(--text-light);
+            color: var(--text-cream);
+            font-family: var(--font-body);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             overflow-x: hidden;
-            padding: 20px;
+            padding: 30px 20px;
         }
 
+        /* --- HEADER E FOTO --- */
         header {
             text-align: center;
             margin-bottom: 40px;
+            width: 100%;
+            max-width: 800px;
             animation: fadeIn 1s ease-out;
         }
 
+        .couple-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .photo-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: rgba(244, 238, 221, 0.1);
+            border: 3px dashed var(--accent-peach);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--accent-peach);
+            padding: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            background-image:url('IMG_1070.png');/* Para colocar a foto real, basta trocar o background-image aqui no estilo inline via JS ou CSS direto */
+            background-size: cover;
+            background-position: center;
+        }
+
         header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-family: var(--font-title);
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 0px var(--text-dark);
+            color: var(--text-cream);
+        }
+
+        /* --- BARRA DE PROGRESSO --- */
+        .progress-wrapper {
+            width: 100%;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(244, 238, 221, 0.1);
+        }
+
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            color: var(--accent-peach);
         }
 
-        header p {
-            color: #ced4da;
-            font-size: 1.1rem;
+        .progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Grid do Tabuleiro */
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-red);
+            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 10px var(--accent-red);
+        }
+
+        /* --- TABULEIRO --- */
         .board {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 25px;
             width: 100%;
             max-width: 1100px;
-            padding: 20px;
             animation: slideUp 0.8s ease-out;
         }
 
-        /* Deck/Card Estilização */
         .deck {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-red);
+            border-radius: 15px;
             padding: 30px 20px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.4);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            min-height: 320px;
+            min-height: 280px;
         }
 
-        .deck::before {
+        /* Efeito de cartas empilhadas */
+        .deck::before, .deck::after {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 6px;
+            background: var(--card-bg);
+            border: 2px solid var(--accent-red);
+            border-radius: 15px;
+            z-index: -1;
+        }
+        .deck::before {
+            top: 5px; left: 5px; right: -5px; bottom: -5px;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.3);
+        }
+        .deck::after {
+            top: 10px; left: 10px; right: -10px; bottom: -10px;
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.2);
         }
 
-        .deck.n1::before { background: var(--color-n1); }
-        .deck.n2::before { background: var(--color-n2); }
-        .deck.n3::before { background: var(--color-n3); }
-        .deck.n4::before { background: var(--color-n4); }
-
-        .deck:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            background: rgba(255, 255, 255, 0.08);
+        .deck:hover:not(.locked) {
+            transform: translate(-5px, -5px);
+            box-shadow: 13px 13px 0px rgba(0, 0, 0, 0.5);
         }
+        .deck:hover:not(.locked)::before { transform: translate(2px, 2px); }
+        .deck:hover:not(.locked)::after { transform: translate(4px, 4px); }
 
-        .deck-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
-            opacity: 0.9;
+        /* Estilo para Decks Bloqueados */
+        .deck.locked {
+            opacity: 0.5;
+            filter: grayscale(80%);
+            border-color: #555;
+            cursor: not-allowed;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
+        }
+        .deck.locked::before, .deck.locked::after {
+            border-color: #555;
+            box-shadow: none;
+        }
+        .lock-icon {
+            display: none;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+        }
+        .deck.locked .lock-icon {
+            display: block;
         }
 
         .deck-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 8px;
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
 
-        .deck.n1 .deck-title { color: var(--color-n1); }
-        .deck.n2 .deck-title { color: var(--color-n2); }
-        .deck.n3 .deck-title { color: var(--color-n3); }
-        .deck.n4 .deck-title { color: var(--color-n4); }
-
         .deck-desc {
-            font-size: 0.9rem;
-            color: #adb5bd;
+            font-size: 0.95rem;
             margin-bottom: 20px;
-            line-height: 1.4;
+            font-weight: 600;
         }
 
         .card-count {
             font-size: 0.85rem;
-            background: rgba(255,255,255,0.1);
+            background: var(--text-cream);
+            color: var(--text-dark);
             padding: 6px 14px;
             border-radius: 20px;
-            font-weight: 500;
+            font-weight: 800;
+            text-transform: uppercase;
         }
 
-        /* Modal da Pergunta Ativa */
+        /* --- MODAL DA CARTA --- */
         .overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 25, 30, 0.9);
-            backdrop-filter: blur(15px);
+            background: rgba(44, 5, 12, 0.95);
+            backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: center;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.4s ease;
-            z-index: 10;
+            z-index: 100;
             padding: 20px;
         }
 
@@ -154,52 +250,68 @@
         }
 
         .active-card {
-            background: #1f3641;
-            border-radius: 24px;
+            background: var(--text-cream);
+            color: var(--text-dark);
+            border-radius: 10px;
             width: 100%;
-            max-width: 580px;
-            min-height: 420px;
-            padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            max-width: 500px;
+            min-height: 550px;
+            padding: 40px 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            transform: scale(0.8) rotate(-3deg);
+            transform: translateY(50px) rotate(-2deg);
             transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent;
             position: relative;
+            border: 4px solid var(--text-dark);
         }
 
         .overlay.active .active-card {
-            transform: scale(1) rotate(0deg);
+            transform: translateY(0) rotate(0deg);
         }
 
-        /* Animação de descarte para fora da tela */
         .active-card.discard-animation {
             transform: translate(100vw, -50vh) rotate(45deg) scale(0.5) !important;
             opacity: 0;
             transition: transform 0.6s ease-in, opacity 0.6s ease-in;
         }
 
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
         .card-badge {
-            font-size: 0.8rem;
+            font-family: var(--font-title);
+            font-size: 1.5rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-weight: 700;
-            padding: 6px 16px;
-            border-radius: 30px;
-            margin-bottom: 20px;
+            color: var(--accent-red);
+        }
+
+        .turn-indicator {
+            background: var(--accent-peach);
+            color: var(--text-dark);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border: 2px solid var(--text-dark);
         }
 
         .question-text {
-            font-size: 1.4rem;
-            font-weight: 500;
-            line-height: 1.6;
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.5;
             margin: auto 0;
-            color: #ffffff;
-            white-space: pre-line; /* Mantém as quebras de linha dos desafios em listas */
+            white-space: pre-line;
         }
 
         .actions {
@@ -211,47 +323,47 @@
 
         .btn {
             flex: 1;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 12px;
+            padding: 15px 10px;
+            border: 3px solid var(--text-dark);
+            border-radius: 8px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 800;
+            text-transform: uppercase;
             cursor: pointer;
             transition: all 0.2s ease;
+            font-family: var(--font-body);
         }
 
         .btn-pass {
-            background: rgba(255,255,255,0.1);
-            color: var(--text-light);
+            background: transparent;
+            color: var(--text-dark);
         }
-
         .btn-pass:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.05);
         }
 
         .btn-done {
-            background: #fff;
-            color: #111;
-            box-shadow: 0 4px 15px rgba(255,255,255,0.2);
+            background: var(--accent-red);
+            color: var(--text-cream);
         }
-
         .btn-done:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,255,255,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 0px var(--text-dark);
         }
 
-        /* Notificação de Nível Concluído */
+        /* --- TOAST --- */
         .toast {
             position: fixed;
             bottom: -100px;
-            background: #2b9348;
-            color: white;
+            background: var(--accent-peach);
+            color: var(--text-dark);
             padding: 16px 32px;
             border-radius: 30px;
-            font-weight: 600;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            font-weight: 800;
+            border: 2px solid var(--text-dark);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 20;
+            z-index: 200;
             text-align: center;
         }
 
@@ -259,7 +371,6 @@
             bottom: 40px;
         }
 
-        /* Animações nativas */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -270,9 +381,9 @@
         }
 
         @media(max-width: 600px) {
-            .board { grid-template-columns: 1fr; }
-            .active-card { padding: 25px; min-height: 450px; }
-            .question-text { font-size: 1.15rem; }
+            header h1 { font-size: 2.5rem; }
+            .active-card { padding: 30px 20px; min-height: 500px; }
+            .question-text { font-size: 1.2rem; }
             .actions { flex-direction: column; }
         }
     </style>
@@ -280,66 +391,74 @@
 <body>
 
     <header>
-        <h1>Conexões Profundas</h1>
-        <p>Escolha um nível para puxar uma carta e começar</p>
+        <div class="couple-profile">
+            <div class="photo-placeholder">
+               
+            </div>
+        </div>
+        <h1>This Isn't a Game<br></h1>
+        
+        <div class="progress-wrapper">
+            <div class="progress-labels">
+                <span>Início</span>
+                <span>Conexão Total</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
     </header>
 
     <div class="board">
-        <div class="deck n1" onclick="drawCard('n1')">
-            <div class="deck-icon">🌊</div>
-            <div>
-                <div class="deck-title">Nível 1</div>
-                <div class="deck-desc">Molhando os pés. Perguntas leves para quebrar o gelo.</div>
-            </div>
-            <div class="card-count" id="count-n1">0 cartas restantes</div>
+        <div class="deck" id="deck-n1" onclick="drawCard('n1')">
+            <div class="lock-icon">🔒</div>
+            <div class="deck-title">Nível 1</div>
+            <div class="deck-desc">Molhando os pés. Perguntas leves para quebrar o gelo.</div>
+            <div class="card-count" id="count-n1">0 cartas</div>
         </div>
 
-        <div class="deck n2" onclick="drawCard('n2')">
-            <div class="deck-icon">🏊</div>
-            <div>
-                <div class="deck-title">Nível 2</div>
-                <div class="deck-desc">Entrando no mar. Conexões reais e primeiras impressões.</div>
-            </div>
-            <div class="card-count" id="count-n2">0 cartas restantes</div>
+        <div class="deck locked" id="deck-n2" onclick="drawCard('n2')">
+            <div class="lock-icon">🔒</div>
+            <div class="deck-title">Nível 2</div>
+            <div class="deck-desc">Entrando no mar. Conexões reais e primeiras impressões.</div>
+            <div class="card-count" id="count-n2">0 cartas</div>
         </div>
 
-        <div class="deck n3" onclick="drawCard('n3')">
-            <div class="deck-icon">🤿</div>
-            <div>
-                <div class="deck-title">Nível 3</div>
-                <div class="deck-desc">Mergulho Profundo. Vulnerabilidade e intimidade emocional.</div>
-            </div>
-            <div class="card-count" id="count-n3">0 cartas restantes</div>
+        <div class="deck locked" id="deck-n3" onclick="drawCard('n3')">
+            <div class="lock-icon">🔒</div>
+            <div class="deck-title">Nível 3</div>
+            <div class="deck-desc">Mergulho Profundo. Vulnerabilidade e intimidade.</div>
+            <div class="card-count" id="count-n3">0 cartas</div>
         </div>
 
-        <div class="deck n4" onclick="drawCard('n4')">
-            <div class="deck-icon">🃏</div>
-            <div>
-                <div class="deck-title">Nível 4</div>
-                <div class="deck-desc">Desafios Inusitados. Ações divertidas e dinâmicas com papel!</div>
-            </div>
-            <div class="card-count" id="count-n4">0 cartas restantes</div>
+        <div class="deck" id="deck-n4" onclick="drawCard('n4')">
+            <div class="lock-icon">🔒</div>
+            <div class="deck-title">Desafios</div>
+            <div class="deck-desc">Ações inusitadas e dinâmicas divertidas com papel!</div>
+            <div class="card-count" id="count-n4">0 cartas</div>
         </div>
     </div>
 
     <div class="overlay" id="cardOverlay">
         <div class="active-card" id="activeCard">
-            <div class="card-badge" id="cardBadge">Nível 1</div>
+            <div class="card-header">
+                <div class="card-badge" id="cardBadge">Nível 1</div>
+                <div class="turn-indicator" id="turnIndicator">Vez de: Ricardo</div>
+            </div>
             <div class="question-text" id="questionText">Sua pergunta aparecerá aqui...</div>
             <div class="actions">
-                <button class="btn btn-pass" onclick="passQuestion()">Passar pergunta</button>
-                <button class="btn btn-done" onclick="answerQuestion()">Pergunta respondida</button>
+                <button class="btn btn-pass" onclick="passQuestion()">Pular</button>
+                <button class="btn btn-done" onclick="answerQuestion()">Respondida</button>
             </div>
         </div>
     </div>
 
-    <div class="toast" id="toastMessage">Parabéns! Vocês completaram este nível! 🎉</div>
+    <div class="toast" id="toastMessage">Mensagem de aviso</div>
 
     <script>
         const gameData = {
             n1: {
-                name: "Nível 1: Molhando os Pés",
-                color: "var(--color-n1)",
+                name: "Nível 1",
                 cards: [
                     "Qual o seu lugar favorito no mundo?",
                     "Qual é a comida que faz você se sentir abraçado quando come?",
@@ -364,8 +483,7 @@
                 ]
             },
             n2: {
-                name: "Nível 2: Entrando no Mar",
-                color: "var(--color-n2)",
+                name: "Nível 2",
                 cards: [
                     "Conte sobre um dia em que você fez a diferença na vida de alguém.",
                     "Como você gostaria de ser lembrado depois que morresse?",
@@ -390,8 +508,7 @@
                 ]
             },
             n3: {
-                name: "Nível 3: Mergulho Profundo",
-                color: "var(--color-n3)",
+                name: "Nível 3",
                 cards: [
                     "Me conte algo que você aprendeu comigo (hoje).",
                     "Qual foi o momento mais decisivo e/ou importante da sua vida?",
@@ -408,7 +525,7 @@
                     "O que você sente que está prendendo ou bloqueando o seu crescimento pessoal atualmente?",
                     "Qual ferida do seu passado você sente que ainda está em processo de cicatrização?",
                     "Se você pudesse pedir perdão sincero para alguém do seu passado, o que seria?",
-                    "Em quais momentos você se sente mais insecure na nossa dinâmica ou na vida em geral?",
+                    "Em quais momentos você se sente mais inseguro(a) na nossa dinâmica ou na vida em geral?",
                     "O que você mais admira na forma como eu lido com os meus problemas ou com as outras pessoas?",
                     "Se você pudesse ler a minha mente por apenas 1 minuto, o que você gostaria de descobrir?",
                     "Qual palavra define o que você sente quando pensa no nosso futuro a longo prazo?",
@@ -416,54 +533,90 @@
                 ]
             },
             n4: {
-                name: "Nível 4: Desafios Inusitados",
-                color: "var(--color-n4)",
+                name: "Desafios",
                 cards: [
-                    "💌 DESAFIO DO PAPEL:\nTroca de cartas para abrir em momentos específicos.\nCada um deve escrever 5 cartas rápidas em papéis separados:\n\n• Abra quando estiver triste\n• Abra quando sentir saudades\n• Abra quando precisar de motivação\n• Abra quando quiser rir\n• Abra no próximo Dia dos Namorados\n\nDepois, dobrem e guardem para entregar ao outro no final.",
-                    
-                    "✨ DESAFIO DO PAPEL:\nCápsula do tempo do relacionamento.\nEm uma folha de papel, cada um deve escrever secretamente:\n\n• Como se sente hoje\n• O que mais admira no outro neste momento\n• Onde imagina o casal daqui a 5 anos\n• Objetivos pessoais e do relacionamento\n\nDobrem juntos e guardem em uma caixa para abrir apenas no futuro!",
-                    
-                    "🌎 DESAFIO DO PAPEL:\nMapa dos sonhos a dois.\nPeguem uma folha grande (ou juntem papéis). Desenhem ou escrevam juntos um mapa visual contendo:\n\n• Lugares do mundo que querem visitar\n• Experiências marcantes que querem viver juntos\n• Grandes projetos de vida que pretendem construir",
-
-                    "🎨 DESAFIO DO PAPEL:\nO Desenho às Cegas.\nPeguem uma folha e uma caneta. Vocês devem tentar desenhar o retrato um do outro ao mesmo tempo, mas com uma regra: é proibido olhar para o papel enquanto desenha, apenas fixem os olhos no rosto do outro. Preparem-se para rir do resultado!",
-
-                    "✍️ DESAFIO DO PAPEL:\nA Nota Secreta de Gratidão.\nCada um pega um pequeno pedaço de papel e escreve um agradecimento profundo por algo que o outro fez recentemente. Sem deixar o parceiro ver, você deve esconder esse bilhete em algum lugar (na carteira, na bolsa ou no bolso do casaco dele) para ser achado só amanhã.",
-
-                    "🔮 DESAFIO DO PAPEL:\nOrigami das Linhas Cruzadas.\nEscrevam 3 'ações/mimos' românticos que gostariam de receber em papéis dobrados (ex: massagem de 10 min, fazer o jantar amanhã). Misturem os papéis e cada um sorteia um papel do outro. O sorteado vira uma promessa que deve ser cumprida na semana.",
-
-                    "📖 DESAFIO DO PAPEL:\nRetrato em Acróstico.\nEscrevam o nome do outro na vertical em uma folha. Usando cada letra do nome, criem frases ou palavras que definam o que você sente ou admira na pessoa. Depois, leiam um para o outro.",
-
-                    "💬 DESAFIO DO PAPEL:\nO Conto de Duas Linhas.\nPeguem uma única folha. Um escreve a primeira frase de uma história fictícia sobre o casal. Passa a folha e o outro escreve a linha seguinte criando um desfecho inusitado. Repitam por 4 rodadas até criarem um miniconto maluco.",
-
-                    "Coloquem os celulares no modo avião e usem o bloco de notas um do outro para deixar uma mensagem que será lida depois que o date acabar.",
+                    "💌 DESAFIO DO PAPEL:\nTroca de cartas para abrir em momentos específicos. Cada um escreve 5 bilhetes:\n\n• Abra quando estiver triste\n• Abra quando sentir saudades\n• Abra quando precisar de motivação\n• Abra quando quiser rir\n• Abra no próximo Dia dos Namorados",
+                    "✨ DESAFIO DO PAPEL:\nCápsula do tempo. Escrevam secretamente:\n\n• Como se sente hoje\n• O que mais admira no outro\n• Onde imagina o casal em 5 anos\n• Objetivos pessoais e a dois\n\nDobrem e guardem!",
+                    "🌎 DESAFIO DO PAPEL:\nMapa dos sonhos a dois. Desenhem juntos:\n\n• Lugares que querem visitar\n• Experiências que querem viver juntos\n• Grandes projetos de vida",
+                    "🎨 DESAFIO DO PAPEL:\nO Desenho às Cegas. Tentem desenhar o retrato um do outro ao mesmo tempo sem olhar para o papel, apenas para o rosto do outro!",
+                    "✍️ DESAFIO DO PAPEL:\nA Nota Secreta de Gratidão. Escreva um agradecimento profundo por algo recente e esconda nas coisas do outro para ser achado amanhã.",
+                    "🔮 DESAFIO DO PAPEL:\nOrigami das Linhas Cruzadas. Escrevam 3 'mimos' que gostariam de receber. Sorteiem os papéis e cumpram a promessa na semana.",
+                    "📖 DESAFIO DO PAPEL:\nRetrato em Acróstico. Escrevam o nome do outro na vertical e usem cada letra para definir o que sentem ou admiram.",
+                    "💬 DESAFIO DO PAPEL:\nO Conto de Duas Linhas. Um escreve a primeira frase de uma história de vocês, passa a folha e o outro continua. Façam 4 rodadas.",
+                    "Coloquem os celulares no modo avião e usem o bloco de notas um do outro para deixar uma mensagem que será lida depois do date.",
                     "Criem um apelido amigável um para o outro e só se chamem assim até o fim do date.",
                     "Exercício da contemplação: Fiquem em pé, frente a frente, e falem sobre cada parte do corpo que um admira no outro.",
-                    "(re) criem o primeiro date de vocês. Usem a criatividade para se aproximar de como foi na época.",
-                    "Escolham um filme/série/documentário para verem juntos. Escrevam sobre o que sentiram e compartilhem.",
-                    "Olhos nos Olhos: Fiquem em silêncio absolutos, olhando fixamente nos olhos um do outro por 2 minutos inteiros.",
+                    "(Re)criem o primeiro date de vocês. Usem a criatividade para se aproximar de como foi na época.",
+                    "Escolham um filme/série para verem juntos. Escrevam sobre o que sentiram e compartilhem.",
+                    "Olhos nos Olhos: Fiquem em silêncio absoluto, olhando fixamente nos olhos um do outro por 2 minutos.",
                     "A Playlist do Date: Escolham 3 músicas juntos agora. Uma do começo, uma de hoje, e uma do futuro de vocês.",
-                    "O Toque às Cegas: Um fecha os olhos e tenta reconhecer os traços do rosto do outro usando apenas o toque das mãos por 1 minuto.",
-                    "Massagem Express: Faça uma massagem relaxante nas mãos ou ombros do outro por 3 minutos seguidos.",
-                    "O Espelho Humano: Pelos próximos 5 minutos, vocês devem tentar imitar sutilmente os gestos e postura um do outro enquanto conversam.",
-                    "Alimentação Confiante: Durante as próximas 3 rodadas de petiscos ou bebidas, um deve dar na boca do outro com carinho.",
+                    "O Toque às Cegas: Um fecha os olhos e tenta reconhecer os traços do rosto do outro apenas com as mãos por 1 minuto.",
+                    "Massagem Express: Faça uma massagem relaxante nas mãos ou ombros do outro por 3 minutos.",
+                    "O Espelho Humano: Pelos próximos 5 minutos, imitem sutilmente os gestos e postura um do outro enquanto conversam.",
+                    "Alimentação Confiante: Nas próximas 3 rodadas de petiscos ou bebidas, um deve dar na boca do outro.",
                     "Dança Sem Música: Levantem-se e dancem uma música lenta imaginária por 1 minuto focando só no batimento cardíaco do parceiro.",
-                    "O Elogio Exagerado: Cada um tem 30 segundos para fazer o elogio mais dramático e poético sobre uma característica boba do outro.",
-                    "O Brinde dos 80 Anos: Encham seus copos e façam um brinde olhando nos olhos completando a frase: 'Um brinde ao dia em que nós...'"
+                    "O Elogio Exagerado: Cada um tem 30 segundos para fazer o elogio mais dramático sobre uma característica boba do outro.",
+                    "O Brinde dos 80 Anos: Encham seus copos e façam um brinde completando: 'Um brinde ao dia em que nós...'"
                 ]
             }
         };
 
+        // Estado Global
         let currentLevel = null;
         let currentCardIndex = null;
+        let currentPlayer = "Ricardo";
+        
+        // Progresso (total de perguntas de conversação - desconsiderando N4 que são desafios)
+        const totalProgressQuestions = gameData.n1.cards.length + gameData.n2.cards.length + gameData.n3.cards.length;
+        let answeredQuestions = 0;
 
         function updateCounters() {
             Object.keys(gameData).forEach(lvl => {
                 const count = gameData[lvl].cards.length;
-                document.getElementById(`count-${lvl}`).innerText = count === 1 ? `1 carta restante` : `${count} cartas restantes`;
+                document.getElementById(`count-${lvl}`).innerText = count === 1 ? `1 carta` : `${count} cartas`;
             });
         }
 
+        function updateProgress() {
+            const percentage = (answeredQuestions / totalProgressQuestions) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function checkLocks() {
+            const n1Empty = gameData.n1.cards.length === 0;
+            const n2Empty = gameData.n2.cards.length === 0;
+
+            const deckN2 = document.getElementById('deck-n2');
+            const deckN3 = document.getElementById('deck-n3');
+
+            if (n1Empty) {
+                deckN2.classList.remove('locked');
+            } else {
+                deckN2.classList.add('locked');
+            }
+
+            if (n1Empty && n2Empty) {
+                deckN3.classList.remove('locked');
+            } else {
+                deckN3.classList.add('locked');
+            }
+        }
+
+        function switchPlayer() {
+            currentPlayer = currentPlayer === "Ricardo" ? "Giovanna" : "Ricardo";
+        }
+
         function drawCard(level) {
+            // Verificar bloqueios
+            if (level === 'n2' && gameData.n1.cards.length > 0) {
+                showToast("Termine o Nível 1 primeiro! 🔒");
+                return;
+            }
+            if (level === 'n3' && gameData.n2.cards.length > 0) {
+                showToast("Termine o Nível 2 primeiro! 🔒");
+                return;
+            }
+
             const levelDeck = gameData[level];
             if (levelDeck.cards.length === 0) {
                 showToast("Todas as cartas deste nível já foram jogadas!");
@@ -474,20 +627,19 @@
             currentCardIndex = Math.floor(Math.random() * levelDeck.cards.length);
             const question = levelDeck.cards[currentCardIndex];
 
-            const badge = document.getElementById('cardBadge');
-            badge.innerText = levelDeck.name;
-            badge.style.background = levelDeck.color;
-            badge.style.color = '#fff';
-            
-            const cardBox = document.getElementById('activeCard');
-            cardBox.style.borderColor = levelDeck.color;
-
+            document.getElementById('cardBadge').innerText = levelDeck.name;
             document.getElementById('questionText').innerText = question;
+            
+            // Definir de quem é a vez (desafios podem ser para os dois, mas mantemos o indicador para fluidez)
+            document.getElementById('turnIndicator').innerText = currentLevel === 'n4' ? "Desafio para o Casal" : `Vez de: ${currentPlayer}`;
+
             document.getElementById('cardOverlay').classList.add('active');
         }
 
         function passQuestion() {
             closeModal();
+            // Alterna o jogador mesmo se pular
+            if (currentLevel !== 'n4') switchPlayer();
         }
 
         function answerQuestion() {
@@ -495,11 +647,27 @@
             cardBox.classList.add('discard-animation');
 
             setTimeout(() => {
+                // Remover carta do array
                 gameData[currentLevel].cards.splice(currentCardIndex, 1);
+                
+                // Atualizar progresso se não for desafio
+                if (currentLevel !== 'n4') {
+                    answeredQuestions++;
+                    updateProgress();
+                    switchPlayer();
+                }
+                
                 updateCounters();
+                checkLocks();
                 
                 if (gameData[currentLevel].cards.length === 0) {
-                    showToast(`Incrível! Vocês finalizaram todo o conteúdo do ${gameData[currentLevel].name}! 🎉`);
+                    if(currentLevel === 'n3') {
+                        showToast(`PARABÉNS! Vocês completaram a Jornada Profunda! 🎉❤️`);
+                    } else if (currentLevel !== 'n4') {
+                        showToast(`Incrível! Próximo nível desbloqueado! 🔓`);
+                    } else {
+                        showToast(`Todos os desafios concluídos! 🏆`);
+                    }
                 }
 
                 closeModal();
@@ -517,10 +685,12 @@
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 4500);
+            }, 4000);
         }
 
+        // Inicializar o jogo
         updateCounters();
+        checkLocks();
     </script>
 </body>
 </html>
